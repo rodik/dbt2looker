@@ -309,7 +309,7 @@ def lookml_view_from_dbt_model(model: models.DbtModel, adapter_type: models.Supp
     lookml = {
         'view': {
             'name': model.name,
-            'sql_table_name': model.relation_name,
+            'sql_table_name': re.sub("^\w+\.", "", model.relation_name), # force 2-part name
             'dimension_groups': lookml_dimension_groups_from_model(model, adapter_type),
             'dimensions': lookml_dimensions_from_model(model, adapter_type),
             'measures': lookml_measures_from_model(model),
