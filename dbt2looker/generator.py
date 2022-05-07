@@ -49,6 +49,8 @@ LOOKER_DTYPE_MAP = {
         'TIME': 'string',        # can we support time?
         'TIMESTAMP': 'timestamp',
         'TIMESTAMP_NTZ': 'timestamp',
+        'TIMESTAMP_LTZ': 'timestamp',
+        'TIMESTAMP_TZ': 'timestamp',
         # TIMESTAMP_LTZ not supported (see https://docs.looker.com/reference/field-params/dimension_group)
         # TIMESTAMP_TZ not supported (see https://docs.looker.com/reference/field-params/dimension_group)
         'VARIANT': 'string',
@@ -201,8 +203,9 @@ def map_adapter_type_to_looker(adapter_type: models.SupportedDbtAdapters, column
 
 
 def lookml_date_time_dimension_group(column: models.DbtModelColumn, adapter_type: models.SupportedDbtAdapters):
+    short_name = re.sub("_at$|_date$", "", (column.meta.dimension.name or column.name))
     return {
-        'name': column.meta.dimension.name or column.name,
+        'name': short_name,
         'type': 'time',
         'sql': column.meta.dimension.sql or f'${{TABLE}}.{column.name}',
         'description': column.meta.dimension.description or column.description,
@@ -212,8 +215,9 @@ def lookml_date_time_dimension_group(column: models.DbtModelColumn, adapter_type
 
 
 def lookml_date_dimension_group(column: models.DbtModelColumn, adapter_type: models.SupportedDbtAdapters):
+    short_name = re.sub("_at$|_date$", "", (column.meta.dimension.name or column.name))
     return {
-        'name': column.meta.dimension.name or column.name,
+        'name': short_name,
         'type': 'time',
         'sql': column.meta.dimension.sql or f'${{TABLE}}.{column.name}',
         'description': column.meta.dimension.description or column.description,

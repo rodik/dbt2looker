@@ -1,7 +1,11 @@
 version: 2
 
 sources:
-  - name: landing_page
-    schema: landing_page
+  - name: dwh
+    schema: CORE
+    loader: dbt_job
     tables:
-      - name: pages
+      - name: dim_agency
+        description: "TODO"      
+      - name: fact_policy
+        description: "TODO"      
